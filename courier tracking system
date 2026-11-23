@@ -1,0 +1,159 @@
+# Courier Tracking System
+
+parcels = []
+
+next_tracking_id = 1001
+
+statuses = ["Booked", "Picked Up", "In Transit", "Delivered"]
+
+
+# Function 1: Book Parcel
+
+def book_parcel():
+
+    global next_tracking_id
+
+    sender = input("Enter sender name: ")
+    receiver = input("Enter receiver name: ")
+    destination = input("Enter destination: ")
+
+    tracking_id = "CT" + str(next_tracking_id)
+
+    parcel = {
+        "tracking_id": tracking_id,
+        "sender": sender,
+        "receiver": receiver,
+        "destination": destination,
+        "status": "Booked",
+        "history": ["Booked"]
+    }
+
+    parcels.append(parcel)
+
+    next_tracking_id += 1
+
+    print("\nParcel booked successfully!")
+    print("Tracking ID:", tracking_id)
+    print("Status: Booked")
+
+
+# Function 2: Update Status
+
+def update_status():
+
+    tracking_id = input("Enter tracking ID: ")
+
+    for parcel in parcels:
+
+        if parcel["tracking_id"] == tracking_id:
+
+            current_status = parcel["status"]
+
+            if current_status == "Delivered":
+                print("Parcel already delivered. No further updates allowed.")
+                return
+
+            current_index = statuses.index(current_status)
+
+            new_status = statuses[current_index + 1]
+
+            parcel["status"] = new_status
+
+            parcel["history"].append(new_status)
+
+            print("Status updated:",
+                  current_status, "->", new_status)
+
+            return
+
+    print("Tracking ID not found.")
+
+
+# Function 3: Track Parcel
+
+def track_parcel():
+
+    tracking_id = input("Enter tracking ID: ")
+
+    for parcel in parcels:
+
+        if parcel["tracking_id"] == tracking_id:
+
+            print("\n========== PARCEL DETAILS ==========")
+
+            print("Tracking ID:", parcel["tracking_id"])
+            print("Sender:", parcel["sender"])
+            print("Receiver:", parcel["receiver"])
+            print("Destination:", parcel["destination"])
+
+            print("History:", " -> ".join(parcel["history"]))
+
+            print("Current Status:", parcel["status"])
+
+            return
+
+    print("Tracking ID not found.")
+
+
+# Function 4: Search by Receiver
+
+def search_receiver():
+
+    receiver_name = input("Enter receiver name: ")
+
+    found = False
+
+    for parcel in parcels:
+
+        if parcel["receiver"].lower() == receiver_name.lower():
+
+            print("\nTracking ID:", parcel["tracking_id"])
+            print("Sender:", parcel["sender"])
+            print("Receiver:", parcel["receiver"])
+            print("Destination:", parcel["destination"])
+            print("Status:", parcel["status"])
+
+            found = True
+
+    if not found:
+        print("No parcel found for this receiver.")
+
+
+# Main Menu
+
+while True:
+
+    print("\n========== COURIER TRACKING SYSTEM ==========")
+
+    print("1. Book Parcel")
+    print("2. Update Status")
+    print("3. Track Parcel")
+    print("4. Search by Receiver")
+    print("5. Exit")
+
+    choice = input("Enter your choice: ")
+
+    if choice == "1":
+
+        book_parcel()
+
+    elif choice == "2":
+
+        update_status()
+
+    elif choice == "3":
+
+        track_parcel()
+
+    elif choice == "4":
+
+        search_receiver()
+
+    elif choice == "5":
+
+        print("Thank you for using Courier Tracking System!")
+        break
+
+    else:
+
+        print("Invalid choice! Please try again.")
